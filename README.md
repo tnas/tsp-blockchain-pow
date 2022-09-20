@@ -1,2 +1,3 @@
 # tsp-blockchain-pow
-PoW Algorithm for theTraveling Salesman Problem
+Proof of Work Algorithm for theTraveling Salesman Problem
+
