@@ -1,7 +1,7 @@
 use std::fs;
 
 fn main() {
-    // let _weights = [[0; 86000]; 86000];
+    // let _weights = Box::new([[0; 86000]; 86000]);
 
     let paths = fs::read_dir("./tsplib95").unwrap();
 
