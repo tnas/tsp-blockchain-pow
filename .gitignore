@@ -10,6 +10,7 @@ Cargo.lock
 **/*.rs.bk
 
 /.vscode
+/tsplib95/ALL_instances
 
 # Added by cargo
 
