@@ -17,8 +17,9 @@ Cargo.lock
 /target
 
 # Added by C code
-/bin
-/obj
-/target
+src-c/bin
+src-c/obj
+src-c/target
 tsp-blockchain-pow.cbp  
 tsp-blockchain-pow.layout
+tsp-blockchain-pow.depend

@@ -42,9 +42,8 @@ int main()
                 char header_value[field_len];
                 strncpy(header_value, line + matched_groups[g].rm_so, field_len);
                 header_value[field_len] = '\0';
-//                printf("Extracted value[%d]: %s\n", g-1, header_value);
+                printf("Extracted value[%d]: %s\n", header_value);
                 header[g - 1] = header_value;
-                printf("Extracted value[%d]: %s\n", g-1, header[g-1]);
             }
 
             printf("Header Name: %s - Header Value: %s\n", header[0], header[1]);
