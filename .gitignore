@@ -15,3 +15,10 @@ Cargo.lock
 # Added by cargo
 
 /target
+
+# Added by C code
+/bin
+/obj
+/target
+tsp-blockchain-pow.cbp  
+tsp-blockchain-pow.layout
