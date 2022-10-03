@@ -1,18 +1,22 @@
 mod fhandler;
+mod pow;
 
 use std::env;
 use fhandler::*;
+use pow::*;
 
 const TSPLIB_INST_FOLDER: &str = "./tsplib95/ALL_tsp/";
 
 fn main() {
 
     let args: Vec<String> = env::args().collect();
-    let mut path = String::from(TSPLIB_INST_FOLDER);
-    path.push_str(&args[1]);
+    let mut fpath = String::from(TSPLIB_INST_FOLDER);
+    fpath.push_str(&args[1]);
 
-    let mut weight_matrix: Vec<Vec<i64>> = Vec::new();
+    let mut distances: Vec<Vec<i64>> = Vec::new();
     let mut cities: Vec<Euc2d> = Vec::new();
-    parse_tsp_file(path, &mut weight_matrix, &mut cities);
+    let mut circuit: Vec<u32> = Vec::new();
 
+    let dimension = parse_tsp_file(fpath, &mut distances, &mut cities);
+    generate_circuit(&mut circuit, dimension);
 }
