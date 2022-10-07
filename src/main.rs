@@ -19,7 +19,7 @@ fn main() {
 
     let dimension = parse_tsp_file(fpath, &mut distances, &mut cities);
     generate_circuit(dimension);
-    build_genesis_block(dimension);
-
+    let genesis = build_genesis_block(dimension);
+    index(genesis.blockhash, 10, dimension);
     
 }
