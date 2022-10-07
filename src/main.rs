@@ -15,8 +15,11 @@ fn main() {
 
     let mut distances: Vec<Vec<i64>> = Vec::new();
     let mut cities: Vec<Euc2d> = Vec::new();
-    let mut circuit: Vec<u32> = Vec::new();
+    
 
     let dimension = parse_tsp_file(fpath, &mut distances, &mut cities);
-    generate_circuit(&mut circuit, dimension);
+    generate_circuit(dimension);
+    build_genesis_block(dimension);
+
+    
 }

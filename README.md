@@ -10,3 +10,4 @@
 - [Conquering Generals: an NP-Hard Proof of Useful Work](https://pure.royalholloway.ac.uk/portal/files/39587484/Accepted_Manuscript.pdf)
 - [Blockchain Scheme Based on Evolutionary Proof of Work](https://www.researchgate.net/publication/335063536_Blockchain_Scheme_Based_on_Evolutionary_Proof_of_Work)
 - [COCP: Blockchain Proof-of-Useful-Work Leveraging Real-Life Applications](http://www.mi.sanu.ac.rs/~tanjad/BCCA2022_RC_5811.pdf)
+- [Proof-of-Useful-Work: BlockChain Mining by Solving Real-Life Optimization Problems](https://www.mdpi.com/2073-8994/14/9/1831)

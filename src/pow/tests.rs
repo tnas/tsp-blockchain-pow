@@ -4,9 +4,7 @@ use super::*;
 fn is_circuit_correctly_initiated() {
 
     let dim: usize = 5;
-    let mut circuit: Vec<u32> = Vec::new();
-
-    generate_circuit(&mut circuit, dim);
+    let circuit = generate_circuit(dim);
 
     for i in 0..dim-1 {
 
