@@ -7,6 +7,7 @@ use std::path::Path;
 use std::str::FromStr;
 use strum_macros::EnumString;
 use regex::Regex;
+use crate::tsp::Euc2d;
 
 #[derive(Debug, PartialEq, EnumString)]
 enum EdgeWeightType {
@@ -14,11 +15,6 @@ enum EdgeWeightType {
     Euc2D,
     #[strum(serialize = "EXPLICIT")]
     Explicit
-}
-
-pub struct Euc2d {
-    x_coord: f64,
-    y_coord: f64
 }
 
 const DIMENSION_PATTERN: &str = r"DIMENSION\s*:\s*(\d+)";
@@ -31,18 +27,14 @@ where P: AsRef<Path>, {
     Ok(io::BufReader::new(file).lines())
 }
 
-#[inline]
-fn init_weight_matrix(weight_matrix: &mut Vec<Vec<i64>>, dimension: usize) {
-    for _ in 0..=dimension {
-        weight_matrix.push(vec![0; dimension+1]);
-    }
-}
-
-pub fn parse_tsp_file(path: String, weight_matrix: &mut Vec<Vec<i64>>, cities: &mut Vec<Euc2d>) -> usize {
+pub fn parse_tsp_file(path: String) -> (usize, Vec<Euc2d>, Vec<Vec<i64>>) {
 
     let dim_regex = Regex::new(DIMENSION_PATTERN).unwrap();
     let edge_type_regex = Regex::new(EDGE_WEIGHT_PATTERN).unwrap();
     let mut load_weights = false;
+
+    let mut weight_matrix: Vec<Vec<i64>> = Vec::new();
+    let mut cities: Vec<Euc2d> = Vec::new();
     let mut dimension: usize = 0;
 
     cities.push(Euc2d { x_coord: 0.0_f64, y_coord: 0.0_f64 }); // invalid 0-index city
@@ -68,8 +60,11 @@ pub fn parse_tsp_file(path: String, weight_matrix: &mut Vec<Vec<i64>>, cities: &
 
                     dimension = dim_regex.captures(instruction.as_str()).unwrap()
                         .get(1).map_or(0, |m| m.as_str().parse::<usize>().unwrap());
-
-                    init_weight_matrix(weight_matrix, dimension);
+                    
+                    // Initing weights matrix
+                    for _ in 0..=dimension {
+                        weight_matrix.push(vec![0; dimension+1]);
+                    }
                 }
                 else if instruction.starts_with("EDGE_WEIGHT_TYPE") {
                     let edge_type = edge_type_regex.captures(instruction.as_str()).unwrap()
@@ -84,21 +79,5 @@ pub fn parse_tsp_file(path: String, weight_matrix: &mut Vec<Vec<i64>>, cities: &
         }
     }
 
-    calculate_weights(weight_matrix, cities, dimension);
-
-    dimension
-}
-
-pub fn calculate_weights(weight_matrix: &mut Vec<Vec<i64>>, cities: &Vec<Euc2d>, dim: usize) {
-
-    for row in 1..=dim {
-
-        for col in 1..=dim {
-
-            // Euclidian Distance
-            weight_matrix[row][col] = f64::sqrt(
-                f64::powi(cities[col].x_coord - cities[row].x_coord, 2) +
-                f64::powi(cities[col].y_coord - cities[row].y_coord, 2)).round() as i64;
-        }
-    }
+    (dimension, cities, weight_matrix)
 }

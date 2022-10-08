@@ -13,12 +13,10 @@ fn main() {
     let mut fpath = String::from(TSPLIB_INST_FOLDER);
     fpath.push_str(&args[1]);
 
-    let mut distances: Vec<Vec<i64>> = Vec::new();
-    let mut cities: Vec<Euc2d> = Vec::new();
-    
+    let (dimension, cities, distances) = parse_tsp_file(fpath);
+    let mut tspinst = tsp::init_tsp(cities, distances, dimension);
+    tspinst.calculate_distances();
 
-    let dimension = parse_tsp_file(fpath, &mut distances, &mut cities);
     let genesis = pow::build_genesis_block(tsp::generate_circuit(dimension));
     pow::get_index(genesis.blockhash, 10, dimension);
-    
 }

@@ -1,7 +1,47 @@
 #[cfg(test)]
 mod tests;
 
+use std::vec;
+
 use rand::Rng;
+pub struct Euc2d {
+    pub x_coord: f64,
+    pub y_coord: f64
+}
+
+pub struct TSP {
+    pub dimension: usize,
+    pub cities: Vec<Euc2d>,
+    pub distances: Vec<Vec<i64>>
+}
+
+impl TSP {
+
+    pub fn calculate_distances(&mut self) {
+
+        for row in 1..=self.dimension {
+
+            for col in 1..=self.dimension {
+    
+                // Euclidian Distance
+                self.distances[row][col] = f64::sqrt(
+                    f64::powi(self.cities[col].x_coord - self.cities[row].x_coord, 2) +
+                    f64::powi(self.cities[col].y_coord - self.cities[row].y_coord, 2)).round() as i64;
+            }
+        }
+    }
+}
+
+pub fn init_tsp(cityvec: Vec<Euc2d>, distvec: Vec<Vec<i64>>, dim: usize) -> TSP {
+
+    let tsp = TSP {
+        dimension: dim,
+        cities: cityvec,
+        distances: distvec
+    };
+
+    tsp
+}
 
 pub fn generate_circuit(dim: usize) -> Vec<u32> {
 
