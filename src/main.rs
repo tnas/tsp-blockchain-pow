@@ -14,9 +14,11 @@ fn main() {
     fpath.push_str(&args[1]);
 
     let (dimension, cities, distances) = parse_tsp_file(fpath);
-    let mut tspinst = tsp::init_tsp(cities, distances, dimension);
-    tspinst.calculate_distances();
+    let tspinst = tsp::init_tsp(cities, distances, dimension);
 
-    let genesis = pow::build_genesis_block(tsp::generate_circuit(dimension));
+    let circuit = tsp::generate_circuit(dimension);
+    println!("Circuit value: {}", tspinst.calculate_circuit_value(&circuit));
+
+    let genesis = pow::build_genesis_block(circuit);
     pow::get_index(genesis.blockhash, 10, dimension);
 }

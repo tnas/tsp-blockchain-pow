@@ -30,15 +30,28 @@ impl TSP {
             }
         }
     }
+
+    pub fn calculate_circuit_value(&self, circuit: &Vec<u32>) -> i64 {
+
+        let mut total: i64 = 0;
+
+        for i in 0..circuit.len() - 1 {
+            total += self.distances[i][i + 1];
+        }
+
+        total
+    }
 }
 
 pub fn init_tsp(cityvec: Vec<Euc2d>, distvec: Vec<Vec<i64>>, dim: usize) -> TSP {
 
-    let tsp = TSP {
+    let mut tsp = TSP {
         dimension: dim,
         cities: cityvec,
         distances: distvec
     };
+
+    tsp.calculate_distances();
 
     tsp
 }
