@@ -40,8 +40,6 @@ fn hash_block(block: &Block) -> String {
 
     let hash = hasher.finalize();
 
-    println!("{:x}", hash);
-
     format!("{:x}", hash)
 }
 
@@ -99,11 +97,11 @@ pub fn generate_circuit(dim: usize) -> Vec<u32> {
     circuit
 }
 
-pub fn index(hash: String, kdim: u32, dim: usize) -> Vec<u32> {
+pub fn get_index(hash: String, kdim: u32, dim: usize) -> Vec<u32> {
 
     let mut ksubspace = Vec::new();
 
-    let xbytes = hex::decode(hash);
+    let xbytes = hex::decode(hash.clone());
     let mut dhash = BigUint::from_bytes_be(&xbytes.ok().unwrap());
  
     let ubig_dim = ToBigUint::to_biguint(&0xF).unwrap();
@@ -117,19 +115,13 @@ pub fn index(hash: String, kdim: u32, dim: usize) -> Vec<u32> {
             ksubspace.push(kelement);
         }
     
-        println!("{:?} mod {:?} = {}", dhash, dim, kelement);
-    
         dhash = dhash.div_floor(&ubig_dim);
 
         if dhash == BigUint::zero() {
-            // let hhash = hash_string(hash.as_str());
-            // dhash = BigUint::from_bytes_be(&hex::decode(hhash).ok().unwrap());
+            let hhash = hash_string(hash.clone());
+            dhash = BigUint::from_bytes_be(&hex::decode(hhash).ok().unwrap());
         }
-    
-        println!("{:?}", dhash);
     }
-
-    println!("ksubspace: {:?}", ksubspace);
 
     ksubspace
 }
