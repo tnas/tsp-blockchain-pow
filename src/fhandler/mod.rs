@@ -27,6 +27,13 @@ where P: AsRef<Path>, {
     Ok(io::BufReader::new(file).lines())
 }
 
+#[inline]
+pub fn init_weight_matrix(weight_matrix: &mut Vec<Vec<i64>>, dimension: usize) {
+    for _ in 0..=dimension {
+        weight_matrix.push(vec![0; dimension+1]);
+    }
+}
+
 pub fn parse_tsp_file(path: String) -> (usize, Vec<Euc2d>, Vec<Vec<i64>>) {
 
     let dim_regex = Regex::new(DIMENSION_PATTERN).unwrap();
@@ -62,9 +69,7 @@ pub fn parse_tsp_file(path: String) -> (usize, Vec<Euc2d>, Vec<Vec<i64>>) {
                         .get(1).map_or(0, |m| m.as_str().parse::<usize>().unwrap());
                     
                     // Initing weights matrix
-                    for _ in 0..=dimension {
-                        weight_matrix.push(vec![0; dimension+1]);
-                    }
+                    init_weight_matrix(&mut weight_matrix, dimension);
                 }
                 else if instruction.starts_with("EDGE_WEIGHT_TYPE") {
                     let edge_type = edge_type_regex.captures(instruction.as_str()).unwrap()
