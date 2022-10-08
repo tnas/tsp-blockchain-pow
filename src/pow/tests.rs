@@ -1,22 +1,10 @@
 use super::*;
 
 #[test]
-fn is_circuit_correctly_initiated() {
-
-    let dim: usize = 5;
-    let circuit = generate_circuit(dim);
-
-    for i in 0..dim-1 {
-
-        assert!(circuit[i] <= dim as u32);
-
-        for j in i + 1..dim {
-            assert_ne!(circuit[i], circuit[j]);
-        }
-    }
-
-    assert_eq!(circuit[0], circuit[dim]);
-    assert_eq!(circuit.len(), dim + 1);
+fn get_hash_string() {
+    let word = String::from("I am Satoshi Nakamoto");
+    let expected = String::from("5d7c7ba21cbbcd75d14800b100252d5b428e5b1213d27c385bc141ca6b47989e");
+    assert_eq!(expected, hash_string(word));
 }
 
 #[test]

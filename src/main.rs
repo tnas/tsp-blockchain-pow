@@ -1,9 +1,9 @@
 mod fhandler;
 mod pow;
+mod tsp;
 
 use std::env;
 use fhandler::*;
-use pow::*;
 
 const TSPLIB_INST_FOLDER: &str = "./tsplib95/ALL_tsp/";
 
@@ -18,8 +18,7 @@ fn main() {
     
 
     let dimension = parse_tsp_file(fpath, &mut distances, &mut cities);
-    generate_circuit(dimension);
-    let genesis = build_genesis_block(dimension);
-    get_index(genesis.blockhash, 10, dimension);
+    let genesis = pow::build_genesis_block(tsp::generate_circuit(dimension));
+    pow::get_index(genesis.blockhash, 10, dimension);
     
 }

@@ -1,10 +1,8 @@
 #[cfg(test)]
 mod tests;
 
-use std::vec;
-use rand::Rng;
-use sha2::{Sha256, Digest};
 use hex;
+use sha2::{Sha256, Digest};
 use num::{bigint::{BigUint, ToBigUint}, Integer, ToPrimitive, Zero};
 
 pub struct Block {
@@ -44,12 +42,12 @@ fn hash_block(block: &Block) -> String {
 }
 
 
-pub fn build_genesis_block(dim: usize) -> Block {
+pub fn build_genesis_block(circuit: Vec<u32>) -> Block {
 
     let genesis_header = BlockHeader {
         height: 0,
         difficulty: 0.0,
-        circuit: generate_circuit(dim)
+        circuit: circuit
     };
 
     let mut genesis = Block {
@@ -61,40 +59,6 @@ pub fn build_genesis_block(dim: usize) -> Block {
     genesis.blockhash = hash_block(&genesis);
 
     genesis
-}
-
-pub fn generate_circuit(dim: usize) -> Vec<u32> {
-
-    let mut circuit: Vec<u32> = Vec::new();
-    let mut is_selected = vec![false; dim + 1];
-
-    let mut rng = rand::thread_rng();
-    let first = rng.gen_range(1..dim + 1);
-    circuit.push(first as u32);
-    is_selected[first] = true;
-    
-    for _ in 0..dim {
-
-        let mut city;
-        
-        loop {
-            city = rng.gen_range(1..dim + 1);
-            if !is_selected[city] {
-                break;
-            }
-        }
-
-        circuit.push(city as u32);
-        is_selected[city] = true;
-
-        if circuit.len() == dim {
-            break;
-        }
-    }
-
-    circuit.push(first as u32);
-
-    circuit
 }
 
 pub fn get_index(hash: String, kdim: u32, dim: usize) -> Vec<u32> {
