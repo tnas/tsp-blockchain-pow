@@ -14,7 +14,9 @@ enum EdgeWeightType {
     #[strum(serialize = "EUC_2D")]
     Euc2D,
     #[strum(serialize = "EXPLICIT")]
-    Explicit
+    Explicit,
+    #[strum(serialize = "GEO")]
+    Geo // TODO: implement geo distance function
 }
 
 const DIMENSION_PATTERN: &str = r"DIMENSION\s*:\s*(\d+)";
@@ -75,7 +77,8 @@ pub fn parse_tsp_file(path: String) -> (usize, Vec<Euc2d>, Vec<Vec<i64>>) {
                     let edge_type = edge_type_regex.captures(instruction.as_str()).unwrap()
                         .get(1).map_or("", |m| m.as_str());
                     let weight_type = EdgeWeightType::from_str(edge_type).unwrap();
-                    assert_eq!(EdgeWeightType::Euc2D, weight_type);
+                    // assert_eq!(EdgeWeightType::Euc2D, weight_type);
+                    assert_eq!(EdgeWeightType::Geo, weight_type);
                 }
                 else if instruction.starts_with("NODE_COORD_SECTION") {
                     load_weights = true;

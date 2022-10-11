@@ -20,7 +20,7 @@ fn integer_euclidian_dist() {
     expected[1][3] = 73;
     expected[2][3] = 19;
 
-    let inst = init_tsp(cities, weight_matrix, dim);
+    let inst = TSP::init(cities, weight_matrix, dim);
     
     assert_eq!(expected[1][2], inst.distances[1][2]);
     assert_eq!(expected[1][3], inst.distances[1][3]);
@@ -31,7 +31,9 @@ fn integer_euclidian_dist() {
 fn is_circuit_correctly_initiated() {
 
     let dim: usize = 5;
-    let circuit = generate_circuit(dim);
+    let mut tsp = TSP::new();
+    tsp.dimension = dim;
+    let circuit = tsp.generate_circuit();
 
     for i in 0..dim-1 {
 

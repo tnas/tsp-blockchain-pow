@@ -17,7 +17,26 @@ pub struct TSP {
 
 impl TSP {
 
-    pub fn calculate_distances(&mut self) {
+    pub fn new() -> Self {
+        Self {
+            dimension: 0,
+            cities: Vec::new(),
+            distances: Vec::new()
+        }
+    }
+
+    pub fn init(cities: Vec<Euc2d>, distances: Vec<Vec<i64>>, dimension: usize) -> Self {
+
+        let mut me = Self {
+            dimension, cities, distances
+        };
+
+        me.load_distances();
+
+        me
+    }
+
+    pub fn load_distances(&mut self) {
 
         for row in 1..=self.dimension {
 
@@ -31,7 +50,41 @@ impl TSP {
         }
     }
 
-    pub fn calculate_circuit_value(&self, circuit: &Vec<u32>) -> i64 {
+    fn random_append(&self, mut circuit: Vec<u32>, from: usize, exto: usize, dim: usize) -> Vec<u32> {
+
+        let mut is_selected = vec![false; exto];
+        let mut rng = rand::thread_rng();
+ 
+        for _ in 0..dim {
+    
+            let mut city;
+            
+            loop {
+                city = rng.gen_range(from..exto);
+                if !is_selected[city] {
+                    break;
+                }
+            }
+    
+            circuit.push(city as u32);
+            is_selected[city] = true;
+        }
+
+        circuit
+    }
+
+    pub fn generate_circuit(&self) -> Vec<u32> {
+
+        let mut circuit: Vec<u32> = Vec::new();
+
+        circuit.push(0);
+        circuit = self.random_append(circuit, 1, self.dimension + 1, self.dimension);
+        circuit[0] = circuit[self.dimension];
+    
+        circuit
+    }
+
+    pub fn evaluate_circuit(&self, circuit: &Vec<u32>) -> i64 {
 
         let mut total: i64 = 0;
 
@@ -41,51 +94,22 @@ impl TSP {
 
         total
     }
-}
 
-pub fn init_tsp(cityvec: Vec<Euc2d>, distvec: Vec<Vec<i64>>, dim: usize) -> TSP {
+    pub fn generate_neighbor(&self, original: &Vec<u32>, ksubspace: &Vec<u32>) -> Vec<u32> {
 
-    let mut tsp = TSP {
-        dimension: dim,
-        cities: cityvec,
-        distances: distvec
-    };
+        let mut neighbor = original.clone();
+        let kdim = ksubspace.len();
 
-    tsp.calculate_distances();
+        let mut neighidx = Vec::new();
+        neighidx = self.random_append(neighidx, 0, kdim, kdim);
 
-    tsp
-}
-
-pub fn generate_circuit(dim: usize) -> Vec<u32> {
-
-    let mut circuit: Vec<u32> = Vec::new();
-    let mut is_selected = vec![false; dim + 1];
-
-    let mut rng = rand::thread_rng();
-    let first = rng.gen_range(1..dim + 1);
-    circuit.push(first as u32);
-    is_selected[first] = true;
-    
-    for _ in 0..dim {
-
-        let mut city;
-        
-        loop {
-            city = rng.gen_range(1..dim + 1);
-            if !is_selected[city] {
-                break;
-            }
+        for nidx in 0..kdim {
+            neighbor.swap(ksubspace[nidx] as usize, neighidx[nidx] as usize);
         }
 
-        circuit.push(city as u32);
-        is_selected[city] = true;
+        neighbor[original.len() - 1] = neighbor[0];
 
-        if circuit.len() == dim {
-            break;
-        }
+        neighbor
     }
 
-    circuit.push(first as u32);
-
-    circuit
 }

@@ -4,6 +4,7 @@ mod tsp;
 
 use std::env;
 use fhandler::*;
+use tsp::*;
 
 const TSPLIB_INST_FOLDER: &str = "./tsplib95/ALL_tsp/";
 
@@ -14,11 +15,17 @@ fn main() {
     fpath.push_str(&args[1]);
 
     let (dimension, cities, distances) = parse_tsp_file(fpath);
-    let tspinst = tsp::init_tsp(cities, distances, dimension);
+    let tspinst = TSP::init(cities, distances, dimension);
 
-    let circuit = tsp::generate_circuit(dimension);
-    println!("Circuit value: {}", tspinst.calculate_circuit_value(&circuit));
-
+    let circuit = tspinst.generate_circuit();
+    println!("Loop: {:?}", circuit);
+    println!("Circuit value: {}", tspinst.evaluate_circuit(&circuit));
+    
     let genesis = pow::build_genesis_block(circuit);
-    pow::get_index(genesis.blockhash, 10, dimension);
+    let ksubspace = pow::get_index(&genesis.blockhash, 5, 14);
+    println!("Ksubspace: {:?}", ksubspace);
+
+    let neighbor = tspinst.generate_neighbor(&genesis.header.circuit, &ksubspace);
+    println!("Neighbor: {:?}", neighbor);
+    println!("Neighbor value: {}", tspinst.evaluate_circuit(&neighbor));
 }

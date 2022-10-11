@@ -13,7 +13,7 @@ fn index_subspace() {
     let hash = String::from("4fc0fc4638ae261dbabf49eba978869a7dfa5dc56f3a58d5f91f04307a85001f");
     let kdim: u32 = 10;
     let dim: usize = 280;
-    let ksubspace = get_index(hash, kdim, dim);
+    let ksubspace = get_index(&hash, kdim, dim);
     let expected:Vec<u32> = vec![175, 86, 117, 7, 149, 65, 191, 12, 0, 261];
 
     for i in 0..expected.len() {

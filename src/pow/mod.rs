@@ -5,6 +5,14 @@ use hex;
 use sha2::{Sha256, Digest};
 use num::{bigint::{BigUint, ToBigUint}, Integer, ToPrimitive, Zero};
 
+const DEFAULT_KSUBSPACE_DIM: u32 = 5;
+
+// pub struct Blockchain {
+//     pub kdim: u32,
+//     pub difficulty: f64,
+//     pub blocks: Vec<Block>
+// }
+
 pub struct Block {
     pub prev_blockhash: String,
     pub blockhash: String,
@@ -12,10 +20,17 @@ pub struct Block {
 }
 
 pub struct BlockHeader {
-    height: u32,
-    difficulty: f64,
-    circuit: Vec<u32>
+    pub kdim: u32,
+    pub difficulty: f64,
+    pub circuit: Vec<u32>
 }
+
+// impl Blockchain {
+
+//     pub fn start(&self) {
+
+//     } 
+// }
 
 
 fn hash_string(word: String) -> String {
@@ -31,7 +46,7 @@ fn hash_block(block: &Block) -> String {
     
     let mut hasher = Sha256::new()
         .chain_update(block.prev_blockhash.as_bytes())
-        .chain_update(u32::to_ne_bytes(block.header.height))
+        .chain_update(u32::to_ne_bytes(block.header.kdim))
         .chain_update(f64::to_ne_bytes(block.header.difficulty));
     block.header.circuit.iter().for_each(|e| hasher.update(u32::to_be_bytes(*e)));
     
@@ -45,7 +60,7 @@ fn hash_block(block: &Block) -> String {
 pub fn build_genesis_block(circuit: Vec<u32>) -> Block {
 
     let genesis_header = BlockHeader {
-        height: 0,
+        kdim: DEFAULT_KSUBSPACE_DIM,
         difficulty: 0.0,
         circuit: circuit
     };
@@ -61,7 +76,7 @@ pub fn build_genesis_block(circuit: Vec<u32>) -> Block {
     genesis
 }
 
-pub fn get_index(hash: String, kdim: u32, dim: usize) -> Vec<u32> {
+pub fn get_index(hash: &String, kdim: u32, dim: usize) -> Vec<u32> {
 
     let mut ksubspace = Vec::new();
 
