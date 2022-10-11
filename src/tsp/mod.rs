@@ -50,7 +50,7 @@ impl TSP {
         }
     }
 
-    fn random_append(&self, mut circuit: Vec<u32>, from: usize, exto: usize, dim: usize) -> Vec<u32> {
+    fn random_append(&self, circuit: &mut Vec<u32>, from: usize, exto: usize, dim: usize) {
 
         let mut is_selected = vec![false; exto];
         let mut rng = rand::thread_rng();
@@ -69,8 +69,6 @@ impl TSP {
             circuit.push(city as u32);
             is_selected[city] = true;
         }
-
-        circuit
     }
 
     pub fn generate_circuit(&self) -> Vec<u32> {
@@ -78,7 +76,7 @@ impl TSP {
         let mut circuit: Vec<u32> = Vec::new();
 
         circuit.push(0);
-        circuit = self.random_append(circuit, 1, self.dimension + 1, self.dimension);
+        self.random_append(&mut circuit, 1, self.dimension + 1, self.dimension);
         circuit[0] = circuit[self.dimension];
     
         circuit
@@ -101,7 +99,7 @@ impl TSP {
         let kdim = ksubspace.len();
 
         let mut neighidx = Vec::new();
-        neighidx = self.random_append(neighidx, 0, kdim, kdim);
+        self.random_append(&mut neighidx, 0, kdim, kdim);
 
         for nidx in 0..kdim {
             neighbor.swap(ksubspace[nidx] as usize, neighidx[nidx] as usize);
