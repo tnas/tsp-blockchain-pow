@@ -19,13 +19,13 @@ fn main() {
 
     let circuit = tspinst.generate_circuit();
     println!("Loop: {:?}", circuit);
-    println!("Circuit value: {}", tspinst.evaluate_circuit(&circuit));
     
+    println!("Circuit value: {}", tspinst.evaluate_circuit(&circuit));
     let genesis = pow::build_genesis_block(circuit);
     let ksubspace = pow::get_index(&genesis.blockhash, 5, 14);
     println!("Ksubspace: {:?}", ksubspace);
 
     let neighbor = tspinst.generate_neighbor(&genesis.header.circuit, &ksubspace);
-    println!("Neighbor: {:?}", neighbor);
+    println!("Noop: {:?}", neighbor);
     println!("Neighbor value: {}", tspinst.evaluate_circuit(&neighbor));
 }

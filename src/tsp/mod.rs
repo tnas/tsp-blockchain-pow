@@ -93,8 +93,14 @@ impl TSP {
         let mut neighidx = Vec::new();
         self.random_append(&mut neighidx, 0, kdim, kdim);
 
+        let mut neighsubspace = vec![0; kdim];
         for nidx in 0..kdim {
-            neighbor.swap(ksubspace[nidx] as usize, neighidx[nidx] as usize);
+            neighsubspace[neighidx[nidx] as usize] = ksubspace[nidx];
+        }
+        println!("NSubspace: {:?}", neighsubspace);
+
+        for nidx in 0..kdim {
+            neighbor[neighsubspace[nidx] as usize] = original[ksubspace[nidx] as usize];
         }
 
         neighbor[original.len() - 1] = neighbor[0];
