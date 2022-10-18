@@ -17,14 +17,6 @@ pub struct TSP {
 
 impl TSP {
 
-    pub fn new() -> Self {
-        Self {
-            dimension: 0,
-            cities: Vec::new(),
-            distances: Vec::new()
-        }
-    }
-
     pub fn init(cities: Vec<Euc2d>, distances: Vec<Vec<i64>>, dimension: usize) -> Self {
 
         let mut me = Self {

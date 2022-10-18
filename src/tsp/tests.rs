@@ -31,7 +31,11 @@ fn integer_euclidian_dist() {
 fn is_circuit_correctly_initiated() {
 
     let dim: usize = 5;
-    let mut tsp = TSP::new();
+    let mut tsp = TSP {
+        dimension: 0,
+        cities: Vec::new(),
+        distances: Vec::new()
+    };
     tsp.dimension = dim;
     let circuit = tsp.generate_circuit();
 
