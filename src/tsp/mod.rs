@@ -87,7 +87,7 @@ impl TSP {
         let mut total: i64 = 0;
 
         for i in 0..circuit.len() - 1 {
-            total += self.distances[i][i + 1];
+            total += self.distances[circuit[i] as usize][circuit[i + 1] as usize];
         }
 
         total
