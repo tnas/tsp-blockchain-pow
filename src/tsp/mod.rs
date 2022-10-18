@@ -2,8 +2,9 @@
 mod tests;
 
 use std::vec;
-
+use num::ToPrimitive;
 use rand::Rng;
+
 pub struct Euc2d {
     pub x_coord: f64,
     pub y_coord: f64
@@ -106,6 +107,46 @@ impl TSP {
         neighbor[original.len() - 1] = neighbor[0];
 
         neighbor
+    }
+
+    #[inline]
+    fn norm(self, city: usize) -> f64 {
+        f64::sqrt(
+            f64::powi(self.cities[city].x_coord, 2) +
+                f64::powi(self.cities[city].y_coord, 2))
+    }
+
+
+    pub fn is_blm(self, original: &Vec<u32>, neighbor: &Vec<u32>, ksubspace: &Vec<u32>) -> bool {
+
+        let diff_dist = self.evaluate_circuit(&original)
+            .abs_diff(self.evaluate_circuit(&neighbor)).to_f32().unwrap();
+
+        let threshold_factor = ksubspace.len().to_f64().unwrap() / self.dimension.to_f64().unwrap();
+        
+        println!("threshold: {:}", diff_dist);
+
+        for i in 0..ksubspace.len() {
+
+            let thetai = neighbor[ksubspace[i] as usize];
+
+            let dist_thetai = 
+                self.distances[original[ksubspace[i] as usize] as usize][thetai as usize]
+                    .abs().to_f64().unwrap();
+            
+            let thetai_norm = f64::sqrt(
+                f64::powi(self.cities[thetai as usize].x_coord, 2) +
+                    f64::powi(self.cities[thetai as usize].y_coord, 2));
+
+            println!("dist: {}, normfactor: {}", dist_thetai, thetai_norm * threshold_factor);
+
+            if dist_thetai >= thetai_norm * threshold_factor {
+                println!("NOT blm!");
+                return false;
+            }
+        }   
+        println!("BLM!");
+        true
     }
 
 }

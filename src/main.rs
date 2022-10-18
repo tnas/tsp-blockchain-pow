@@ -28,4 +28,5 @@ fn main() {
     let neighbor = tspinst.generate_neighbor(&genesis.header.circuit, &ksubspace);
     println!("Noop: {:?}", neighbor);
     println!("Neighbor value: {}", tspinst.evaluate_circuit(&neighbor));
+    tspinst.is_blm(&genesis.header.circuit, &neighbor, &ksubspace);
 }
